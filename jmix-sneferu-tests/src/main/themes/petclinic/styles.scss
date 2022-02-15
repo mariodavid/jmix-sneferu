@@ -1,8 +1,0 @@
-@import "petclinic-defaults";
-@import "addons";
-@import "petclinic";
-
-.petclinic {
-  @include addons;
-  @include petclinic;
-}
