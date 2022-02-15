@@ -127,6 +127,7 @@
                         caption="msg://clearFilter"
                         icon="ERASER"/>
                 <action id="excelExport" type="excelExport"/>
+                <action id="openPetById" caption="msg://openPetById" icon="font-icon:SEARCH"/>
             </actions>
             <columns>
                 <column id="name"/>
@@ -142,6 +143,7 @@
                 <button id="editBtn" action="petsTable.edit"/>
                 <button id="removeBtn" action="petsTable.remove" stylename="danger"/>
                 <button id="excelExportBtn" action="petsTable.excelExport" />
+                <button id="openPetByIdBtn" action="petsTable.openPetById" />
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

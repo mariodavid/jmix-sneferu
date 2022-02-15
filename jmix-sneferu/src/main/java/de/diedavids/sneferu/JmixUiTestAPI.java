@@ -11,6 +11,7 @@ import io.jmix.ui.app.inputdialog.InputDialog;
 import io.jmix.ui.screen.Screen;
 import io.jmix.ui.screen.StandardEditor;
 import io.jmix.ui.screen.StandardLookup;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class JmixUiTestAPI implements UiTestAPI {
             return new StandardEditorTestAPI(screenEditorClass, castedScreen);
         }
         else {
-            throw new ScreenNotOpenException();
+            throw screenNotFoundException(screenEditorClass);
         }
     }
 
@@ -59,8 +60,8 @@ public class JmixUiTestAPI implements UiTestAPI {
                 screenEditorClass);
 
             return lazyOptionalScreen
-                .map(ScreenTestAPI::screen)
-                .orElseThrow(ScreenNotOpenException::new);
+                    .map(ScreenTestAPI::screen)
+                    .orElseThrow(() -> screenNotFoundException(screenEditorClass));
         }));
     }
 
@@ -80,7 +81,7 @@ public class JmixUiTestAPI implements UiTestAPI {
 
             return lazyOptionalScreen
                 .map(ScreenTestAPI::screen)
-                .orElseThrow(ScreenNotOpenException::new);
+                .orElseThrow(() -> screenNotFoundException(screenLookupClass));
         }));
     }
 
@@ -98,7 +99,7 @@ public class JmixUiTestAPI implements UiTestAPI {
 
             return lazyOptionalScreen
                 .map(ScreenTestAPI::screen)
-                .orElseThrow(ScreenNotOpenException::new);
+                .orElseThrow(() -> screenNotFoundException(screenClass));
         }));
     }
 
@@ -158,8 +159,17 @@ public class JmixUiTestAPI implements UiTestAPI {
             return new StandardLookupTestAPI<E,S>(screenLookupClass, castedScreen);
         }
         else {
-            throw new ScreenNotOpenException();
+            throw screenNotFoundException(screenLookupClass);
         }
+    }
+
+    @NotNull
+    private ScreenNotOpenException screenNotFoundException(Class screenClass) {
+        return new ScreenNotOpenException(String.format("No Screen of class %s found", screenClass.getSimpleName()));
+    }
+    @NotNull
+    private ScreenNotOpenException multipleScreensFoundException(Class screenClass) {
+        return new ScreenNotOpenException(String.format("Multiple open Screens of class %s found", screenClass.getSimpleName()));
     }
 
     @Override
@@ -173,7 +183,7 @@ public class JmixUiTestAPI implements UiTestAPI {
             return new StandardScreenTestAPI<>(screenClass, castedScreen);
         }
         else {
-            throw new ScreenNotOpenException();
+            throw screenNotFoundException(screenClass);
         }
     }
 
@@ -246,13 +256,14 @@ public class JmixUiTestAPI implements UiTestAPI {
             getOpenedScreens().getAll()
         );
 
-        if (activeScreens.size() > 0) {
+        if (!activeScreens.isEmpty()) {
             return activeScreens.get(activeScreens.size() - 1);
         }
         else {
             return null;
         }
     }
+
 
 
     <S extends Screen> boolean screenTypesMatch(Screen screen, Class<S> screenClass) {
@@ -267,11 +278,16 @@ public class JmixUiTestAPI implements UiTestAPI {
 
     @Override
     public InputDialogTestAPI openedInputDialog() {
+        return getOpenedInputDialog();
+    }
+
+    @Override
+    public InputDialogTestAPI getOpenedInputDialog() {
         return new ArrayList<>(getOpenedScreens()
                 .getDialogScreens()).stream()
                 .filter(screen -> InputDialog.class.isAssignableFrom(screen.getClass()))
                 .findFirst()
                 .map(screen -> new InputDialogTestAPI(InputDialog.class, (InputDialog) screen))
-                .orElseThrow(ScreenNotOpenException::new);
+                .orElseThrow(() -> screenNotFoundException(InputDialog.class));
     }
 }

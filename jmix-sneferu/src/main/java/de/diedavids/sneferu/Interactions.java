@@ -8,6 +8,7 @@ import de.diedavids.sneferu.interactions.ClickInteraction;
 import de.diedavids.sneferu.interactions.CloseEditorInteraction;
 import de.diedavids.sneferu.interactions.CloseInputDialogInteraction;
 import de.diedavids.sneferu.interactions.EntityValueInteraction;
+import de.diedavids.sneferu.interactions.EditedEntityInteraction;
 import de.diedavids.sneferu.interactions.GetValueInteraction;
 import de.diedavids.sneferu.interactions.OpenTabInteraction;
 import de.diedavids.sneferu.interactions.ScreenOpenModeInteraction;
@@ -20,7 +21,7 @@ import io.jmix.ui.screen.FrameOwner;
 import java.util.Collection;
 
 /**
- * Factory methods for all interactions of the Interactions API of sneferu.
+ * Factory methods for all interactions of the Interactions API of Sneferu.
  *
  * Normally should be included via a static import like:
  *
@@ -148,6 +149,17 @@ public class Interactions {
      */
     public static <T extends Object> EntityValueInteraction<T> entityValue(String attribute, Class<T> type) {
         return new EntityValueInteraction<>(attribute, type);
+    }
+
+    /**
+     * creates a Get Entity Interaction, that fetches the editied entity from the StandardEditor
+     *
+     * @param <E> type of the Attribute
+     *
+     * @return an EditorValueInteraction instance containing the value
+     */
+    public static <E extends Object> EditedEntityInteraction<E> editedEntity() {
+        return new EditedEntityInteraction<>();
     }
 
     /**

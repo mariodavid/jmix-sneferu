@@ -12,7 +12,7 @@
             <loader/>
         </instance>
 
-        <collection id="petsDc" class="io.jmix.petclinic.entity.pet.Pet" fetchPlan="_instance_name">
+        <collection id="petsDc" class="io.jmix.petclinic.entity.pet.Pet" fetchPlan="_base">
             <loader>
                 <query><![CDATA[select e from petclinic_Pet e]]></query>
             </loader>
@@ -51,7 +51,7 @@
                         </actions>
                     </entityComboBox>
                     <comboBox id="typeField" property="type"/>
-                    <textArea rows="5" property="description" colspan="2" width="100%"/>
+                    <textArea id="descriptionField" rows="5" property="description" colspan="2" width="100%"/>
                 </column>
                 <column width="250px">
                     <dateField id="visitEndField" property="visitEnd"/>

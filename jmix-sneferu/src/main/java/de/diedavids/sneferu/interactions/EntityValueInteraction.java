@@ -16,7 +16,6 @@ public class EntityValueInteraction<T> implements InteractionWithOutcome<T, Stan
     @Override
     public T execute(StandardEditorTestAPI screenTestAPI) {
         return EntityValues.getValue(((StandardEditor) screenTestAPI.screen()).getEditedEntity(), attribute);
-//        return ((StandardEditor) screenTestAPI.screen()).getEditedEntity().<T>getValue(attribute);
     }
 
 }

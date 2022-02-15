@@ -55,6 +55,8 @@ dependencies {
 
 
     testImplementation 'io.jmix.ui:jmix-ui-test-assist'
+
+    testImplementation project(':jmix-sneferu')
 }
 
 

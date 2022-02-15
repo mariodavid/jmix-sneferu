@@ -15,15 +15,6 @@ import io.jmix.ui.screen.StandardLookup;
  */
 public interface UiTestAPI {
 
-
-
-  /**
-   * retrieves the currently opened InputDialog (if any)
-   *
-   * @return instance of InputDialog (via InputDialogTestAPI)
-   */
-  InputDialogTestAPI openedInputDialog();
-
   /**
    * returns a Test API instance for a given Standard Editor Screen class if screen is opened.
    *
@@ -40,18 +31,22 @@ public interface UiTestAPI {
   );
 
 
+  /**
+   * returns a Test API instance for a given Standard Editor Screen class.
+   *
+   * If screen type is not open, the Test API is still returned, but first time an interaction
+   * with the screen happens and the screen is not open, a ScreenNotOpenException will be thrown.
+   *
+   * This can be used for getting a reference to a screen Test API even if the screen is not yet opened.
+   *
+   * @param screenEditorClass the type of the Standard Editor Screen
+   * @param <S> the type of the Screen
+   * @param <E> type of the Entity
+   *
+   * @return an instance of the Test API
+   */
   <E, S extends StandardEditor<E>> StandardEditorTestAPI<E, S> getLazyOpenedEditorScreen(
       Class<S> screenEditorClass
-  );
-
-
-  <E, S extends StandardLookup<E>> StandardLookupTestAPI<E, S> getLazyOpenedLookupScreen(
-      Class<S> screenLookupClass
-  );
-
-
-  <S extends Screen> StandardScreenTestAPI<S> getLazyOpenedStandardScreen(
-      Class<S> screenClass
   );
 
 
@@ -72,6 +67,25 @@ public interface UiTestAPI {
 
 
   /**
+   * returns a Test API instance for a given Standard Lookup Screen class if screen is opened.
+   *
+   * If screen type is not open, the Test API is still returned, but first time an interaction
+   * with the screen happens and the screen is not open, a ScreenNotOpenException will be thrown.
+   *
+   * This can be used for getting a reference to a screen Test API even if the screen is not yet opened.
+   *
+   * @param screenLookupClass the type of the Standard Lookup Screen
+   * @param <S> the type of the Screen
+   * @param <E> type of the Entity
+   *
+   * @return an instance of the Test API
+   */
+  <E, S extends StandardLookup<E>> StandardLookupTestAPI<E, S> getLazyOpenedLookupScreen(
+          Class<S> screenLookupClass
+  );
+
+
+  /**
    * returns a Test API instance for a given Screen class if screen is opened.
    *
    * If screen type is not open, a ScreenNotOpenException will be thrown
@@ -84,6 +98,45 @@ public interface UiTestAPI {
   <S extends Screen> StandardScreenTestAPI<S> getOpenedStandardScreen(
       Class<S> screenClass
   );
+
+
+  /**
+   * returns a Test API instance for a given Screen class if screen is opened.
+   *
+   * If screen type is not open, the Test API is still returned, but first time an interaction
+   * with the screen happens and the screen is not open, a ScreenNotOpenException will be thrown.
+   *
+   * This can be used for getting a reference to a screen Test API even if the screen is not yet opened.
+   *
+   * @param screenClass the type of the Screen
+   * @param <S> the type of the Screen
+   *
+   * @return an instance of the StandardScreenTestAPI
+   */
+  <S extends Screen> StandardScreenTestAPI<S> getLazyOpenedStandardScreen(
+          Class<S> screenClass
+  );
+
+
+
+  /**
+   * @deprecated use UiTestAPI::getOpenedInputDialog instead
+   * retrieves the currently opened InputDialog (if any)
+   *
+   * @return instance of InputDialog (via InputDialogTestAPI)
+   */
+  @Deprecated
+  InputDialogTestAPI openedInputDialog();
+
+
+  /**
+   * retrieves the currently opened InputDialog (if any)
+   *
+   * @return instance of InputDialog (via InputDialogTestAPI)
+   */
+  InputDialogTestAPI getOpenedInputDialog();
+
+
 
 
   /**

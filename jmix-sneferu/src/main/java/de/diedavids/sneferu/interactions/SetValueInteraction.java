@@ -20,13 +20,9 @@ public class SetValueInteraction implements Interaction {
         this.value = value;
     }
 
-
-
     @Override
     public void execute(ScreenTestAPI screenTestAPI) {
         HasValue hasValue = (HasValue) screenTestAPI.component(componentDescriptor).rawComponent();
         hasValue.setValue(value);
     }
-
-
 }

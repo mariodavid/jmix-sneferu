@@ -38,13 +38,14 @@ import static io.jmix.petclinic.entity.visit.VisitTreatmentStatus.IN_PROGRESS;
 @Table(name = "PETCLINIC_VISIT")
 @Entity(name = "petclinic_Visit")
 public class Visit {
+
+    @Id
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
-    @Id
     private UUID id;
 
-    @Column(name = "VERSION", nullable = false)
     @Version
+    @Column(name = "VERSION", nullable = false)
     private Integer version;
 
     @CreatedBy
@@ -74,16 +75,16 @@ public class Visit {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedDate;
 
-    @Column(name = "TYPE_", nullable = false)
     @NotNull
+    @Column(name = "TYPE_", nullable = false)
     private String type;
 
     @JoinColumn(name = "ASSIGNED_NURSE_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private User assignedNurse;
 
-    @JoinColumn(name = "PET_ID", nullable = false)
     @NotNull
+    @JoinColumn(name = "PET_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Pet pet;
 

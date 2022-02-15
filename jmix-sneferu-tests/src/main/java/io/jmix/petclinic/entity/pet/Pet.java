@@ -21,12 +21,9 @@ import java.time.LocalDate;
 @Entity(name = "petclinic_Pet")
 public class Pet extends NamedEntity {
 
-    @Column(name = "IDENTIFICATION_NUMBER", nullable = false)
     @NotNull
+    @Column(name = "IDENTIFICATION_NUMBER", nullable = false)
     private String identificationNumber;
-
-    @Column(name = "NICKNAME", nullable = false)
-    private String nickname;
 
     @Column(name = "BIRTHDATE")
     private LocalDate birthdate;
@@ -38,14 +35,6 @@ public class Pet extends NamedEntity {
     @JoinColumn(name = "OWNER_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Owner owner;
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
 
     public Owner getOwner() {
         return owner;

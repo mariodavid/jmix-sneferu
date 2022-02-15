@@ -58,12 +58,7 @@ public class SneferuUiTestExtension extends JmixUiTestExtension {
             ParameterContext parameterContext,
             ExtensionContext extensionContext
     ) throws ParameterResolutionException {
-        try {
-            return super.supportsParameter(parameterContext, extensionContext);
-        }
-        catch (ParameterResolutionException e) {
-            return isScreenParameter(parameterContext) || isUiTestApiParameter(parameterContext);
-        }
+        return isScreenParameter(parameterContext) || isUiTestApiParameter(parameterContext) || super.supportsParameter(parameterContext, extensionContext);
     }
 
     private boolean isUiTestApiParameter(ParameterContext parameterContext) {

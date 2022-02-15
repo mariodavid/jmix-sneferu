@@ -6,4 +6,7 @@ package de.diedavids.sneferu;
  * currently not opened in the application.
  */
 public class ScreenNotOpenException extends RuntimeException {
+    public ScreenNotOpenException(String message) {
+        super(message);
+    }
 }

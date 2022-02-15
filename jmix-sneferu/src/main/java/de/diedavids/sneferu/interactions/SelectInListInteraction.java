@@ -35,6 +35,11 @@ public class SelectInListInteraction<E> implements Interaction {
     @Override
     public void execute(ScreenTestAPI screenTestAPI) {
         ListComponent listComponent = (ListComponent) screenTestAPI.component(componentDescriptor).rawComponent();
+
+        if (values.size() > 1 && !listComponent.isMultiSelect()) {
+            throw new IllegalArgumentException("Cannot select multiple values for component with multiselect='false'");
+        }
+
         listComponent.setSelected(values);
     }
 
