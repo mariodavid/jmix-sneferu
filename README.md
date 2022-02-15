@@ -17,7 +17,7 @@ It consists of a couple of APIs that allow you to express interactions and verif
 Instead of spending too much time and money maintaining a selenium test suite, Sneferu is the way 
 to have very good test coverage and quality assurance at a fraction of the cost.
 
-Via its easy to read language you can create integration tests that are optimized for readability,
+Via its easy-to-read language you can create integration tests that are optimized for readability,
 because this is what matters most for keeping a test suite maintainable & cheap to operate.
 
 Sneferu enables you to:
