@@ -1,2 +1,8 @@
 rootProject.name = 'jmix-sneferu'
 
+include 'jmix-sneferu'
+include 'jmix-sneferu-tests'
+
+rootProject.children.each { p1 ->
+    p1.buildFileName = "${p1.name}.gradle"
+}
