@@ -68,7 +68,7 @@ class SelectInListInteractionTest {
     assertThat(openedScreen.rawComponent(dataGrid).isMultiSelect()).isFalse();
 
     // when:
-    openedScreen.interact(selectInList(dataGrid, Lists.list(birch)));
+    openedScreen.interact(selectInList(dataGrid, birch));
 
     // then:
     final Veterinarian selectedVetInTable = (Veterinarian) openedScreen.rawComponent(dataGrid).getSingleSelected();

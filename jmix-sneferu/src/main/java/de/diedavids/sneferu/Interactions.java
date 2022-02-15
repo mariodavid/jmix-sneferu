@@ -31,6 +31,22 @@ public class Interactions {
 
 
     /**
+     * creates a click interaction, that clicks on a given component
+     *
+     * @param componentDescriptor the component to click on
+     * @param <C> type of the Component
+     * @param <F> type of the Component Test API
+     *
+     * @return a ClickInteraction instance
+     */
+    public static <C extends Component, F extends ComponentTestAPI<C>> ClickInteraction click(
+            ComponentDescriptor<C, F> componentDescriptor
+    ) {
+        return new ClickInteraction(componentDescriptor);
+    }
+
+
+    /**
      * creates a set value interaction, that sets a value on a given component
      *
      * @param componentDescriptor the component descriptor describing the component to act upon
@@ -60,6 +76,25 @@ public class Interactions {
      * @return a SetValueInteraction instance
      */
     public static <C extends Component, F extends ComponentTestAPI<C>> SetValueInteraction select(
+            ComponentDescriptor<C, F> componentDescriptor,
+            Object value
+    ) {
+        return setValue(componentDescriptor, value);
+    }
+
+    /**
+     * alias for setValue interaction
+     *
+     * creates a set value interaction, that sets a value on a given component
+     *
+     * @param componentDescriptor the component descriptor describing the component to act upon
+     * @param value the value that should be set
+     * @param <C> type of the Component
+     * @param <F> type of the Component Test API
+     *
+     * @return a SetValueInteraction instance
+     */
+    public static <C extends Component, F extends ComponentTestAPI<C>> SetValueInteraction enter(
             ComponentDescriptor<C, F> componentDescriptor,
             Object value
     ) {
@@ -106,27 +141,6 @@ public class Interactions {
 
 
     /**
-     * alias for setValue interaction
-     *
-     * creates a set value interaction, that sets a value on a given component
-     *
-     * @param componentDescriptor the component descriptor describing the component to act upon
-     * @param value the value that should be set
-     * @param <C> type of the Component
-     * @param <F> type of the Component Test API
-     *
-     * @return a SetValueInteraction instance
-     */
-    public static <C extends Component, F extends ComponentTestAPI<C>> SetValueInteraction enter(
-            ComponentDescriptor<C, F> componentDescriptor,
-            Object value
-    ) {
-        return setValue(componentDescriptor, value);
-    }
-
-
-
-    /**
      * creates a open tab interactions, that opens a tab for a given TabSheet component
      *
      * @param tabSheet the tabSheet component descriptor describing the component to act upon
@@ -152,7 +166,7 @@ public class Interactions {
     }
 
     /**
-     * creates a Get Entity Interaction, that fetches the editied entity from the StandardEditor
+     * creates a Edited Entity Interaction, that fetches the edited entity from the StandardEditor
      *
      * @param <E> type of the Attribute
      *
@@ -205,6 +219,16 @@ public class Interactions {
 
 
     /**
+     * creates a Cancel Editor interaction, that closes an editor with the Close Action {@link FrameOwner#WINDOW_CLOSE_ACTION}
+     *
+     * @return a CancelEditorInteraction instance
+     */
+    public static CancelEditorInteraction cancelEditor() {
+        return new CancelEditorInteraction();
+    }
+
+
+    /**
      * creates a Close Input Dialog Interaction, that closes an input dialog with its default action
      *
      * @return a CloseInputDialogInteraction instance
@@ -226,37 +250,11 @@ public class Interactions {
 
 
     /**
-     * creates a Cancel Editor interaction, that closes an editor with the Close Action {@link FrameOwner#WINDOW_CLOSE_ACTION}
-     *
-     * @return a CancelEditorInteraction instance
-     */
-    public static CancelEditorInteraction cancelEditor() {
-        return new CancelEditorInteraction();
-    }
-
-
-    /**
      * creates a Screen Open Mode interaction, that provides information about the OpenMode of the Screen
      *
      * @return a ScreenOpenModeInteraction instance
      */
     public static ScreenOpenModeInteraction screenOpenMode() {
         return new ScreenOpenModeInteraction();
-    }
-
-
-    /**
-     * creates a click interaction, that clicks on a given component
-     *
-     * @param componentDescriptor the component to click on
-     * @param <C> type of the Component
-     * @param <F> type of the Component Test API
-     *
-     * @return a ClickInteraction instance
-     */
-    public static <C extends Component, F extends ComponentTestAPI<C>> ClickInteraction click(
-        ComponentDescriptor<C, F> componentDescriptor
-    ) {
-        return new ClickInteraction(componentDescriptor);
     }
 }
