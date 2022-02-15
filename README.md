@@ -8,17 +8,15 @@
 
 ## Sneferu
 
-Sneferu is a testing library to simplify web integration testing for a CUBA application.
+Sneferu is a testing library to simplify web integration testing for a Jmix application.
 It consists of a couple of APIs that allow you to express interactions and verifications with UI screens via a dedicated high-level testing language. 
 
 
 ### Overview
 
-Instead of spending too much time and money maintaining a selenium test suite, Sneferu is the way 
-to have very good test coverage and quality assurance at a fraction of the cost.
+Instead of spending too much time and money maintaining a selenium test suite, Sneferu is the way to have very good test coverage and quality assurance at a fraction of the cost.
 
-Via its easy-to-read language you can create integration tests that are optimized for readability,
-because this is what matters most for keeping a test suite maintainable & cheap to operate.
+Via its easy-to-read language you can create integration tests that are optimized for readability, because this is what matters most for keeping a test suite maintainable & cheap to operate.
 
 Sneferu enables you to:
  
@@ -28,38 +26,30 @@ Sneferu enables you to:
 * emulate & verify data loading  
 * emulate & verify Service Interface interactions
 
-As Sneferu is based on the web integration test facilities of CUBA, there is a certain limitation in what areas are not covered. In particular, Sneferu relies on the abstractions provided by the CUBA and Vaadin component interfaces. It assumes that behind this interface everything "works as expected". 
+As Sneferu is based on the web integration test facilities of Jmix, there is a certain limitation in what areas are not covered. In particular, Sneferu relies on the abstractions provided by the Jmix and Vaadin component interfaces. It assumes that behind this interface everything "works as expected". 
 
 What Sneferu _does not cover_:
 
-* End-to-End data loading and displaying on a Screen
-* End-to-End Service execution (middleware)
 * Client-Side Vaadin UI logic that is executed only in the browser
 
 #### Sneferu Landscape
 
 ![Sneferu Landscape](img/sneferu-overview.png)
 
-If you can live with those trade-offs, feel free to join the lovely world of web integration testing in CUBA expressed through a beautiful API.
+If you can live with those trade-offs, feel free to join the lovely world of web integration testing in Jmix expressed through a beautiful API.
 
 #### Motivation & Background
 
-Testing of a CUBA application on the web layer mainly consists of two extremes:
+Testing of a Jmix application on the web layer mainly consists of two extremes:
 
 1. write a unit test for the business logic in the screen controllers
 2. write a functional UI test that executes the application through the browser
 
 Both of those extremes have their downsides.
 
-The first one requires mocking out every programmatic interaction with the CUBA UI interfaces. Also, unit tests do not cover any of the screen layout definitions or the data binding of a Screen.
+The first one requires mocking out every programmatic interaction with the Jmix UI interfaces. Also, unit tests do not cover any of the screen layout definitions or the data binding of a Screen.
 
 Selenium-based UI testing, on the other hand, is much more black-box, slower, more brittle and overall harder to maintain. It can achieve a higher degree of confidence since the application behaves as it is supposed to, as it exercises the application almost as the user does. But this trade-off is a very expensive one. 
-
-To mitigate that problem, CUBA 7.1 introduced web integration testing.
-
-Sneferu is taking that new addition and brings it to the next level by making it accessible and very easy to use.
-
-The documentation shows all test cases written in Spock, but Sneferu works with different testing frameworks like JUnit as well.
 
 An example test case in Sneferu looks like this:
 
@@ -99,38 +89,16 @@ public class VisitBrowseToEditTest {
 
 ### Getting Started
 
-To use Sneferu, it is required to add the dependency to the CUBA project. In the `build.gradle` the following dependency has to be added to the web-module:
+To use Sneferu, it is required to add the dependency to the Jmix project. In the `build.gradle` the following dependency has to be added to the web-module:
 
 ```groovy
 configure(webModule) {
     // ...
     dependencies {
-        testCompile('de.diedavids.sneferu:sneferu:**SNEFERU-VERSION**')
+        testImplementation 'de.diedavids.jmix.sneferu:jmix-sneferu:**SNEFERU-VERSION**'
     }
 }
 ```
-
-Additionally the Maven repository `https://dl.bintray.com/mariodavid/cuba-components` has to be added to the list of available repositories of the project (`build.gradle`):
-
-```groovy
-repositories {
-        
-        // ...
-        maven {
-            url  "https://dl.bintray.com/mariodavid/cuba-components"
-        }
-        // ...
-    }
-```
-| CUBA Platform Version | Add-on Version |
-| --------------------- | -------------- |
-| 7.2.x                 | 0.2.x - 0.3.x  |
-
-
-The latest version is: [ ![Download](https://api.bintray.com/packages/mariodavid/cuba-components/sneferu/images/download.svg) ](https://bintray.com/mariodavid/cuba-components/sneferu/_latestVersion)
-
-
-Sneferu can be used with JUnit as well as Spock. Just add the corresponding dependencies into your CUBA project to use it with any of those frameworks.
 
 Afterward, you can create your first web integration test:
 
@@ -175,13 +143,9 @@ class FirstSneferuSpec extends Specification {
 }
 ```
 
-Instead of using `com.haulmont.cuba.web.testsupport.TestUiEnvironment` a Sneferu-specific environment is used: `de.diedavids.sneferu.environment.SneferuUiTestExtension`
-
-This environment-class has an additional parameter, that needs to be provided: `withMainScreen()`, where the Main Screen of the application is configured.
-
 ### Example Usage
 
-A dedicated example of using Sneferu is shown via the CUBA Petclinic sample application: [cuba-platform/cuba-petclinic-using-sneferu](https://github.com/cuba-platform/cuba-petclinic-using-sneferu).
+A dedicated example of using Sneferu is shown via the Jmix Petclinic sample application: [mariodavid/jmix-sneferu-example](https://github.com/mariodavid/jmix-sneferu-example).
 
 It contains a lot of example test cases that show the various usage options of Sneferu.
 
@@ -199,45 +163,25 @@ Let's go through them one by one.
 
 ### UI Test API
 
-The UI Test API is the interaction point in the test case that manages screens. The API allows the developer to open/close screens and retrieve information about the opened screens. It can be accessed through the `environment` instance via its method `getUiTestAPI()`. An example of its usage looks like this:
-
-```groovy
-def "UI Test API usage"() {
-
-    given: 'a screen can be opened by the test case'
-    def customerBrowse = environment.uiTestAPI
-                            .openStandardLookup(Customer, CustomerBrowse)
-                            
-    and: 'a automatically opened screen can be retrieved'
-    def customerEdit = environment.uiTestAPI
-                        .getOpenedEditorScreen(CustomerEdit)
-
-    then: 'information about active state of a screen can be retrieved'
-    uiTestAPI.isActive(customerEdit)
-}
-```
-
-
-#### JUnit 5 Screen Test Injection
-
 When using JUnit, instead of imperatively interact with the `UiTestAPI`, it is also possible to directly inject the screens to the test, that the test should work upon.
 
 An example looks like this:
 
 ```java
-class JUnit5TestInjection {
+class SneferuUiTest {
 
   @Test
   public void a_screen_can_be_injected_to_directly_work_with_the_screens(
-      @StartScreen StandardLookupTestAPI<Visit,VisitBrowse> visitBrowse,
-      @SubsequentScreen StandardEditorTestAPI<Visit, VisitEdit> visitEdit
+      UiTestAPI uiTestAPI
   ) {
 
-    visitBrowse
+      final StandardLookupTestAPI<Visit, VisitBrowse> visitBrowse = uiTestAPI.openStandardLookup(Visit.class, VisitBrowse.class);
+
+      visitBrowse
         .interact(click(button("createBtn")));
     
     visitEdit
-        .interact(enter(dateField("visitDateField"), new Date()));
+        .interact(enter(dateField("visitDateField"), LocalDateTime.now()));
     
     // ...
 
@@ -246,10 +190,6 @@ class JUnit5TestInjection {
 }
 ```
 
-In this case, the test case just expresses its dependencies for the screens that should be used. There are two variants to it:
-
-* `@StartScreen` is used when a screen that needs to be started on should be injected. In case the screen is not already open in the application, it is not possible to inject it
-* `@SubsequentScreen` is used when a screen should be injected in the test but is currently not already opened. In this case, the screen fetching from the application is postponed until the first interaction  
 
 ### Screen Test API
 
@@ -375,7 +315,7 @@ This variant allows having a higher abstraction in the test case. It also decoup
 
 ### Component Test API
 
-The next concept of Sneferu is the Component Test API. This API is the same thing for a `Component` as the `ScreenTestAPI` is for a CUBA Screen. It is an abstraction on top of the CUBA `Component` APIs that is designed in the context of testing.
+The next concept of Sneferu is the Component Test API. This API is the same thing for a `Component` as the `ScreenTestAPI` is for a Jmix Screen. It is an abstraction on top of the Jmix `Component` APIs that is designed in the context of testing.
 
 To use an instance of a Component Test API, it has to be created in the test case (or the Screen Object) via its factory method:
 
@@ -396,7 +336,7 @@ It returns an instance of a subclass of `ComponentDescriptor`. In this case, it 
 
 #### Support custom components
 
-Sneferu currently does not support all the components of CUBA. Furthermore, if you use application-specific components or composite components, Sneferu also can not support them out-of-the-box.
+Sneferu currently does not support all the components of Jmix. Furthermore, if you use application-specific components or composite components, Sneferu also can not support them out-of-the-box.
 
 Therefore, it is possible to create custom Component Descriptors, that represent the component in the testing scenario.
 
