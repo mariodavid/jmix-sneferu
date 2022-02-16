@@ -13,17 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class CloseAllScreensTest {
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void given_oneScreenIsOpen_when_closeAllScreens_then_allScreensAreClosed(Screens screens, UiTestAPI uiTestAPI) {

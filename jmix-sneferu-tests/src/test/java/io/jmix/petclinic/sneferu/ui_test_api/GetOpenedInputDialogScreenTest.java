@@ -27,9 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class GetOpenedInputDialogScreenTest {
@@ -40,8 +38,7 @@ class GetOpenedInputDialogScreenTest {
   DatabaseCleanup databaseCleanup;
 
   @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
+  void setUp() {
     databaseCleanup.removeAllEntities(Pet.class);
   }
 

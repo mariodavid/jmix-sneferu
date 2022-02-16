@@ -20,17 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class GetOpenedStandardScreenTest {
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void given_lookupScreenIsOpen_when_getOpenedScreen_then_screenIsReturned(Screens screens, UiTestAPI uiTestAPI) {

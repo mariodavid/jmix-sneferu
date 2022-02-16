@@ -21,21 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class GetLazyOpenedEditorScreenTest {
 
-
   @Autowired
   private DataManager dataManager;
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void given_screenIsOpenedAfterRetrievingTheLazyReference_when_accessingScreen_then_screenIsReturned(Screens screens, UiTestAPI uiTestAPI) {

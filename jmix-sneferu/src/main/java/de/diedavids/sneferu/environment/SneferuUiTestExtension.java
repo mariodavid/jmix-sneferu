@@ -27,11 +27,15 @@ public class SneferuUiTestExtension extends JmixUiTestExtension {
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
 
+        boolean closeAllScreensBeforeRun = false;
+
         Optional<SneferuUiTest> jmixUiTestAnnotationOpt = AnnotationSupport.findAnnotation(context.getTestClass(), SneferuUiTest.class);
         if (jmixUiTestAnnotationOpt.isPresent()) {
             authenticatedUser = jmixUiTestAnnotationOpt.get().authenticatedUser();
             screenBasePackages = jmixUiTestAnnotationOpt.get().screenBasePackages();
             mainScreenId = jmixUiTestAnnotationOpt.get().mainScreenId();
+
+            closeAllScreensBeforeRun = jmixUiTestAnnotationOpt.get().closeAllScreensBeforeRun();
         }
 
         super.beforeEach(context);
@@ -42,6 +46,10 @@ public class SneferuUiTestExtension extends JmixUiTestExtension {
                 springContext.getBean(ScreenBuilders.class),
                 getAppUI(context).getScreens()
         );
+
+        if (closeAllScreensBeforeRun) {
+            uiTestAPI.closeAllScreens();
+        }
     }
 
     /**

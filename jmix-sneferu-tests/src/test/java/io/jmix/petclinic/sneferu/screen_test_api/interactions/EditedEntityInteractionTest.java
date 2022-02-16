@@ -21,20 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class EditedEntityInteractionTest {
 
   @Autowired
   DataManager dataManager;
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void when_interactionIsPerformed_then_editedEntityIsReturned(UiTestAPI uiTestAPI) {

@@ -94,7 +94,6 @@ dependencies {
 Afterward, you can create your first web integration test:
 
 ```groovy
-
 import de.diedavids.sneferu.UiTestAPI;
 
 import static de.diedavids.sneferu.ComponentDescriptors.*;
@@ -138,15 +137,13 @@ Let's go through them one by one.
 
 ### UI Test API
 
-When using JUnit, instead of imperatively interact with the `UiTestAPI`, it is also possible to directly inject the screens to the test, that the test should work upon.
-
-An example looks like this:
+It is possible to get a reference to the `UiTestAPI` by injecting the dependency by adding a parameter to the test case: `UiTestAPI uiTestAPI`.
 
 ```java
 class SneferuUiTest {
 
   @Test
-  public void a_screen_can_be_injected_to_directly_work_with_the_screens(
+  public void uiTestApi_can_be_injected_to_work_with_the_screens(
       UiTestAPI uiTestAPI
   ) {
 
@@ -156,7 +153,7 @@ class SneferuUiTest {
         .interact(click(button("createBtn")));
     
     visitEdit
-        .interact(enter(dateField("visitDateField"), LocalDateTime.now()));
+        .interact(enter(dateField("visitStartField"), LocalDateTime.now()));
     
     // ...
 
@@ -164,7 +161,6 @@ class SneferuUiTest {
 
 }
 ```
-
 
 ### Screen Test API
 

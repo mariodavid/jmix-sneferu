@@ -33,17 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class OpenTabInteractionTest {
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void when_interactionIsPerformed_then_tabIsSelected(UiTestAPI uiTestAPI) {

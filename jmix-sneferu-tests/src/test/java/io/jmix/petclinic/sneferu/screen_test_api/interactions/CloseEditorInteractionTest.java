@@ -23,17 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class CloseEditorInteractionTest {
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void given_validForm_when_interactionIsPerformed_then_screenIsClosedAndSuccessIsReturned(UiTestAPI uiTestAPI) {

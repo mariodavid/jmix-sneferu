@@ -7,6 +7,7 @@ buildscript {
 group = 'de.diedavids.jmix.sneferu'
 
 subprojects {
+
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
@@ -36,21 +37,23 @@ subprojects {
         archives sourcesJar
     }
 
-    publishing {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/" + System.getenv("GITHUB_REPOSITORY"))
-                credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+    if (it.name != 'jmix-sneferu-tests') {
+        publishing {
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/" + System.getenv("GITHUB_REPOSITORY"))
+                    credentials {
+                        username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                        password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                    }
                 }
             }
-        }
-        publications {
-            javaMaven(MavenPublication) {
-                artifactId = archName
-                from components.java
+            publications {
+                javaMaven(MavenPublication) {
+                    artifactId = archName
+                    from components.java
+                }
             }
         }
     }
@@ -59,4 +62,5 @@ subprojects {
     tasks.withType(GenerateModuleMetadata) {
         enabled = false
     }
+
 }

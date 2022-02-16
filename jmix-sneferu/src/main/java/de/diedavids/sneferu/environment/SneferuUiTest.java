@@ -67,6 +67,13 @@ public @interface SneferuUiTest {
     String mainScreenId() default "";
 
     /**
+     * Closes all screens before the tests runs, in order to have not conflicting screens from other tests
+     *
+     * By default, all screens will be closed before each test
+     */
+    boolean closeAllScreensBeforeRun() default true;
+
+    /**
      * Screens under these packages will be available in test. If packages are not set, all application screens
      * will be available depending on the test's configuration.
      */

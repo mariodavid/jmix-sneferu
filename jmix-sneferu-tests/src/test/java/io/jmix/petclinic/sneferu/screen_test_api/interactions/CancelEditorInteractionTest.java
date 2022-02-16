@@ -21,9 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class CancelEditorInteractionTest {
@@ -35,8 +33,7 @@ class CancelEditorInteractionTest {
   DatabaseCleanup databaseCleanup;
 
   @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
+  void setUp() {
     databaseCleanup.removeAllEntities(Veterinarian.class);
   }
 

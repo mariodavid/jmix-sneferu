@@ -28,17 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class ComponentTestApiTest {
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void given_componentIsPresentOnScreen_when_retrieveComponentViaTestAPI_then_componentTestApiIsReturned(UiTestAPI uiTestAPI) {

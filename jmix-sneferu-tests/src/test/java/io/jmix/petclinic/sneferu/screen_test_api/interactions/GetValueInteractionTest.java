@@ -20,9 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SneferuUiTest(
         authenticatedUser = "admin",
         mainScreenId = "petclinic_MainScreen",
-        screenBasePackages = {
-          "io.jmix.petclinic"
-        }
+        screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
 class GetValueInteractionTest {
@@ -30,11 +28,6 @@ class GetValueInteractionTest {
   private final LocalDateTime VISIT_START_VALUE = LocalDateTime.now();
 
   private final DateFieldComponentDescriptor VISIT_START_FIELD = dateField("visitStartField");
-
-  @BeforeEach
-  void setUp(Screens screens) {
-    screens.removeAll();
-  }
 
   @Test
   void when_interactionIsPerformed_then_valueIsReturnedFromTheComponent(UiTestAPI uiTestAPI) {
