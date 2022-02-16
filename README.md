@@ -2,7 +2,7 @@
 ![CI Pipeline](https://github.com/mariodavid/jmix-sneferu/actions/workflows/test.yml/badge.svg)
 
 [![GitHub release](https://img.shields.io/github/release/mariodavid/jmix-sneferu.svg)](https://github.com/mariodavid/jmix-sneferu/releases/)
-[![Example](https://img.shields.io/badge/example-jmix--sneferu--example-brightgreen)](https://github.com/mariodavid/jmix-sneferu-example)
+[![Example](https://img.shields.io/badge/example-jmix--sneferu--tests-brightgreen)](https://github.com/mariodavid/jmix-sneferu/jmix-sneferu-tests)
 [![Jmix Marketplace](https://img.shields.io/badge/marketplace-jmix--sneferu-orange)](https://www.jmix.io/marketplace/sneferu)
 
 
