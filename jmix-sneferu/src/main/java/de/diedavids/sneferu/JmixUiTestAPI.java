@@ -29,8 +29,6 @@ public class JmixUiTestAPI implements UiTestAPI {
         this.screens = screens;
     }
 
-
-
     @Override
     public <E, S extends StandardEditor<E>> StandardEditorTestAPI<E, S> getOpenedEditorScreen(
         Class<S> screenEditorClass
@@ -57,7 +55,8 @@ public class JmixUiTestAPI implements UiTestAPI {
         return optionalScreen.orElseGet(() -> new StandardEditorTestAPI<E, S>(
             screenEditorClass, () -> {
             final Optional<StandardEditorTestAPI<E, S>> lazyOptionalScreen = tryToOpenStandardEditor(
-                screenEditorClass);
+                screenEditorClass
+            );
 
             return lazyOptionalScreen
                     .map(ScreenTestAPI::screen)
@@ -156,7 +155,7 @@ public class JmixUiTestAPI implements UiTestAPI {
 
         if (screenTypesMatch(screen, screenLookupClass)) {
             S castedScreen = (S) screen;
-            return new StandardLookupTestAPI<E,S>(screenLookupClass, castedScreen);
+            return new StandardLookupTestAPI<>(screenLookupClass, castedScreen);
         }
         else {
             throw screenNotFoundException(screenLookupClass);
@@ -166,10 +165,6 @@ public class JmixUiTestAPI implements UiTestAPI {
     @NotNull
     private ScreenNotOpenException screenNotFoundException(Class screenClass) {
         return new ScreenNotOpenException(String.format("No Screen of class %s found", screenClass.getSimpleName()));
-    }
-    @NotNull
-    private ScreenNotOpenException multipleScreensFoundException(Class screenClass) {
-        return new ScreenNotOpenException(String.format("Multiple open Screens of class %s found", screenClass.getSimpleName()));
     }
 
     @Override
@@ -192,7 +187,7 @@ public class JmixUiTestAPI implements UiTestAPI {
         Class<E> entityClass,
         Class<S> standardEditorClass
     ) {
-        S screen = (S) screenBuilders.editor(entityClass, rootScreen())
+        S screen = screenBuilders.editor(entityClass, rootScreen())
                 .newEntity()
                 .withScreenClass(standardEditorClass)
                 .show();
@@ -209,7 +204,7 @@ public class JmixUiTestAPI implements UiTestAPI {
         Class<S> standardEditorClass,
         E entity
     ) {
-        S screen = (S) screenBuilders.editor(entityClass, rootScreen())
+        S screen = screenBuilders.editor(entityClass, rootScreen())
             .editEntity(entity)
             .withScreenClass(standardEditorClass)
             .show();
@@ -221,7 +216,7 @@ public class JmixUiTestAPI implements UiTestAPI {
         Class<E> entityClass,
         Class<S> lookupScreenClass
     ) {
-        S screen = (S) screenBuilders.lookup(entityClass, rootScreen())
+        S screen = screenBuilders.lookup(entityClass, rootScreen())
                 .withScreenClass(lookupScreenClass)
                 .show();
         return new StandardLookupTestAPI<>(lookupScreenClass, screen);
@@ -234,8 +229,7 @@ public class JmixUiTestAPI implements UiTestAPI {
             .withScreenClass(screenClass)
             .show();
 
-        return new StandardScreenTestAPI<S>(screenClass, screen);
-
+        return new StandardScreenTestAPI<>(screenClass, screen);
     }
 
 
@@ -244,7 +238,13 @@ public class JmixUiTestAPI implements UiTestAPI {
 
         return new ArrayList<>(getOpenedScreens()
                 .getActiveScreens()).stream()
-                .anyMatch(screen -> screenTestAPI.screen().getClass().isAssignableFrom(screen.getClass()));
+                .anyMatch(screen -> screenTypeMatches(screenTestAPI, screen));
+    }
+
+    private boolean screenTypeMatches(ScreenTestAPI screenTestAPI, Screen screen) {
+        return (boolean) screenTestAPI.optionalScreen()
+                .map(it -> it.getClass().isAssignableFrom(screen.getClass()))
+                .orElse(false);
     }
 
     private Screens.OpenedScreens getOpenedScreens() {
@@ -263,8 +263,6 @@ public class JmixUiTestAPI implements UiTestAPI {
             return null;
         }
     }
-
-
 
     <S extends Screen> boolean screenTypesMatch(Screen screen, Class<S> screenClass) {
         return screen != null && screenClass.isAssignableFrom(screen.getClass());

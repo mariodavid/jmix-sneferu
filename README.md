@@ -121,7 +121,7 @@ class FirstSneferuTest {
 
 ### Example Usage
 
-There are a lot of example tests on how to use Sneferu: [jmix-sneferu-tests](jmix-sneferu-tests/src/test/java/io/jmix/petclinic/screen).
+There are a lot of example tests on how to use Sneferu: [jmix-sneferu-tests](jmix-sneferu-tests/src/test/java/io/jmix/petclinic).
 
 
 ### Documentation
@@ -528,3 +528,88 @@ def "a slider component can be used through its custom interaction"() {
              .interact(slide(slider("ageSlider"), 24))
 }
 ```
+
+
+## Migration from CUBA Sneferu
+
+The following things have changed compared to the [CUBA platform Sneferu version](https://github.com/mariodavid/sneferu):
+
+* create UI test by using `@SneferuUiTest` instead of `SneferuTestUiEnvironment`
+* data loading is now part of a UI integration test
+* CUBA platform components have been replaced with Jmix equivalents (`LookupField` --> `EntityComboBox`, etc.)
+* `@NewEntity` annotation has been removed
+
+
+### @SneferuUiTest
+
+For CUBA it was needed to create a test environment object like this:
+
+```java
+public class CubaSneferuTest {
+    
+    @RegisterExtension
+    public SneferuTestUiEnvironment environment =
+            new SneferuTestUiEnvironment(PetclinicWebTestContainer.Common.INSTANCE)
+                    .withScreenPackages(
+                            "com.haulmont.cuba.web.app.main",
+                            "com.haulmont.sample.petclinic.web"
+                    )
+                    .withUserLogin("admin")
+                    .withMainScreen(MainScreen.class);
+}
+```
+
+In Jmix, this has to be replaced with the `@SneferuUiTest` annotation:
+
+```java
+@SpringBootTest
+@SneferuUiTest(authenticatedUser = "admin", mainScreenId = "petclinic_MainScreen", screenBasePackages = "io.jmix.petclinic")
+class JmixSneferuTest {
+    // ...
+}
+```
+
+Additionally `@SpringBootTest` has to be in place as well.
+
+### Data Loading
+
+In Jmix UI integration tests, the database is part of the test case. This is fundamentally different compared to how in CUBA web integration tests were executed. The main difference for the test cases is that test data needs to be put to the database instead of mocking the data.
+
+It also means that the declarative data loading is part of the coverage of a test.
+
+All of this is unrelated to Sneferu, it is just a change in how UI integration tests in Jmix are performed.
+
+In the tests the DataManager dependency can be injected to interact with the database:
+
+```java
+class InteractWithDataManagerTest {
+
+    @Autowired
+    DataManager dataManager;
+    
+    @Test
+    public void useDataManager(UiTestAPI uiTestAPI) {
+        Pet newPet = dataManager.create(Pet.class);
+        newPet.setName("Pikachu");
+        newPet.setIdentificationNumber("025");
+        return dataManager.save(newPet);
+    }
+    
+    // ...
+}
+```
+
+### CUBA Component replacement
+
+In CUBA there were a couple of components, that are not present in Jmix anymore. These components are:
+
+* TokenList
+* PickerField
+* LookupField
+
+In Jmix the following new components are supported:
+
+* ComboBox
+* EntityComboBox
+* TagField
+* TagPicker

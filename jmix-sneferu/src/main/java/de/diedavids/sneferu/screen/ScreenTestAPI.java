@@ -3,15 +3,16 @@ package de.diedavids.sneferu.screen;
 import de.diedavids.sneferu.Interaction;
 import de.diedavids.sneferu.InteractionExecutor;
 import de.diedavids.sneferu.InteractionWithOutcome;
+import de.diedavids.sneferu.ScreenNotOpenException;
 import de.diedavids.sneferu.components.ComponentDescriptor;
 import de.diedavids.sneferu.components.testapi.ComponentTestAPI;
 import io.jmix.ui.component.Component;
 import io.jmix.ui.screen.Screen;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
-public abstract class ScreenTestAPI<S extends Screen, THIS extends ScreenTestAPI> implements
-    InteractionExecutor<THIS> {
+public abstract class ScreenTestAPI<S extends Screen, THIS extends ScreenTestAPI> implements InteractionExecutor<THIS> {
 
   protected S screen;
   protected Supplier<S> screenSupplier;
@@ -33,18 +34,36 @@ public abstract class ScreenTestAPI<S extends Screen, THIS extends ScreenTestAPI
     return screen;
   }
 
+  /**
+   * access to the underlying screen instance (wrapped into an optional)
+   *
+   * Useful when need some direct method invocation / data from the screen instance that is not
+   * expressed through the corresponding ScreenTestAPI.
+   *
+   * @return Optional of the screen instance containing the screen, or nothing in case the screen is not open
+   */
+  public Optional<S> optionalScreen() {
+      try {
+        return Optional.ofNullable(screen());
+      }
+      catch (ScreenNotOpenException e) {
+        return Optional.empty();
+      }
+
+  }
+
   private void initScreen() {
     this.screen = screenSupplier.get();
   }
 
 
-  public ScreenTestAPI(Class<S> screenClass, S screen) {
+  ScreenTestAPI(Class<S> screenClass, S screen) {
     this.screenClass = screenClass;
     this.screen = screen;
   }
 
 
-  public ScreenTestAPI(Class<S> screenClass, Supplier<S> screenSupplier) {
+  ScreenTestAPI(Class<S> screenClass, Supplier<S> screenSupplier) {
     this.screenClass = screenClass;
     this.screenSupplier = screenSupplier;
   }
@@ -110,7 +129,5 @@ public abstract class ScreenTestAPI<S extends Screen, THIS extends ScreenTestAPI
   private <O, THIS extends ScreenTestAPI> O doGet(InteractionWithOutcome<O, THIS> interaction) {
     return interaction.execute((THIS) this);
   }
-
-
 }
 
