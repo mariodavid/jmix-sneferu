@@ -1,4 +1,4 @@
-package io.jmix.petclinic.example;
+package io.jmix.petclinic.examples;
 
 import static de.diedavids.sneferu.ComponentDescriptors.*;
 import static de.diedavids.sneferu.Interactions.click;
@@ -31,7 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
         screenBasePackages = "io.jmix.petclinic"
 )
 @SpringBootTest
-class VisitBrowseToEditTest {
+class CreateVisitTest {
 
   @Autowired
   DataManager dataManager;

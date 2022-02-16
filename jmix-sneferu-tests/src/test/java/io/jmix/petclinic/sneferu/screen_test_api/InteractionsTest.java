@@ -29,18 +29,18 @@ class InteractionsTest {
   void when_interactionIsPerformed_then_resultOfTheInteractionIsVisible(UiTestAPI uiTestAPI) {
 
     // given:
-    final StandardLookupTestAPI<Visit, VisitBrowse> openedScreen = uiTestAPI.openStandardLookup(Visit.class, VisitBrowse.class);
+    final StandardLookupTestAPI<Visit, VisitBrowse> visitBrowse = uiTestAPI.openStandardLookup(Visit.class, VisitBrowse.class);
 
     // and:
-    assertThat(openedScreen.component(button("createBtn"))).isNotNull();
+    assertThat(visitBrowse.component(button("createBtn"))).isNotNull();
 
     // when:
-    openedScreen.interact(click(button("createBtn")));
+    visitBrowse.interact(click(button("createBtn")));
 
     // then:
-    final StandardEditorTestAPI<Visit, VisitEdit> screenAfterCreateButton = uiTestAPI.getLazyOpenedEditorScreen(VisitEdit.class);
+    final StandardEditorTestAPI<Visit, VisitEdit> visitEdit = uiTestAPI.getLazyOpenedEditorScreen(VisitEdit.class);
 
-    assertThat(uiTestAPI.isActive(screenAfterCreateButton))
+    assertThat(uiTestAPI.isActive(visitEdit))
             .isTrue();
   }
 

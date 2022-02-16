@@ -1,4 +1,4 @@
-package io.jmix.petclinic.example;
+package io.jmix.petclinic.examples;
 
 import de.diedavids.sneferu.UiTestAPI;
 import de.diedavids.sneferu.SneferuUiTest;

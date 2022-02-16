@@ -2,7 +2,7 @@
 ![CI Pipeline](https://github.com/mariodavid/jmix-sneferu/actions/workflows/test.yml/badge.svg)
 
 [![GitHub release](https://img.shields.io/github/release/mariodavid/jmix-sneferu.svg)](https://github.com/mariodavid/jmix-sneferu/releases/)
-[![Example](https://img.shields.io/badge/example-jmix--sneferu--tests-brightgreen)](https://github.com/mariodavid/jmix-sneferu/jmix-sneferu-tests)
+[![Example](https://img.shields.io/badge/example-jmix--sneferu--example-brightgreen)](https://github.com/mariodavid/jmix-sneferu-example)
 [![Jmix Marketplace](https://img.shields.io/badge/marketplace-jmix--sneferu-orange)](https://www.jmix.io/marketplace/sneferu)
 
 
@@ -215,36 +215,55 @@ Instead of using the API directly through the TestScreenAPI, it is also possible
 To create a ScreenObject, a class needs to be created representing one screen (in this case `CustomerBrowse`). It furthermore needs to implement the interface `ScreenObject<T extends ScreenTestAPI>`. 
 
 ```java
-public class CustomerBrowseScreenObject implements 
-    ScreenObject<StandardLookupTestAPI<Customer, CustomerBrowse>> {
+public class PetBrowseScreen implements ScreenObject<StandardLookupTestAPI<Pet, PetBrowse>> {
 
-    private StandardLookupTestAPI<Customer, CustomerBrowse> delegate;
-    private final TestUiEnvironment testUiEnvironment;
+    private StandardLookupTestAPI<Pet, PetBrowse> delegate;
+    private UiTestAPI uiTestAPI;
 
-    // ...
-
-    public CustomerBrowseScreenObject searchForCustomer(Customer customer) {
-        delegate
-                .component(suggestionField("quickSearch"))
-                .search(customer);
-
-        return this;
+    @Override
+    public StandardLookupTestAPI<Pet, PetBrowse> delegate() {
+        return delegate;
     }
 
-    public CustomerBrowseScreenObject searchForCustomer(String customerName) {
+    private PetBrowseScreen(UiTestAPI uiTestAPI) {
+        this.uiTestAPI = uiTestAPI;
+        this.delegate = uiTestAPI.openStandardLookup(Pet.class, PetBrowse.class);
+    }
 
-        Metadata metadata = testUiEnvironment.getContainer().getBean(Metadata.class);
+    /**
+     * opens the PetBrowse screen in order to interact with it
+     * @param uiTestAPI the UITestAPI instance to open the screen from
+     * @return an instance of the PetBrowseScreen
+     */
+    public static PetBrowseScreen open(UiTestAPI uiTestAPI) {
+        return new PetBrowseScreen(uiTestAPI);
+    }
 
-        Customer customer = metadata.create(Customer.class);
-        customer.setName(customerName);
 
-        return searchForCustomer(customer);
+    /**
+     * filters the pets table by the given pet type
+     * @param petType the pet type to filter for
+     */
+    public void filterByType(PetType petType) {
+        delegate.interact(enter(comboBox("typeFilterField"), petType));
+    }
+
+    public int petCount() {
+        return pets().size();
+    }
+
+    public Collection<Pet> pets() {
+        return tableComponent().getItems().getItems();
     }
 
     public boolean isActive() {
-        return testUiEnvironment.getUiTestAPI().isActive(delegate);
+        return uiTestAPI.isActive(delegate);
     }
 
+    private Table<Pet> tableComponent() {
+        return delegate.component(table("petsTable"))
+                .rawComponent();
+    }
 }
 ```
 
@@ -254,41 +273,51 @@ With the above definition it is now possible to use this higher level abstractio
 
 The shown test case is using the API of the ScreenObject, which consists of:
 
-* `void searchForCustomer(String customerName)`
-* `void searchForCustomer(Customer customer)`
+* `void filterByType(PetType petType)`
+* `int petCount()`
+* `Collection<Pet> pets()`
 * `boolean isActive()`
 
-```groovy
-def "screens can be used through its Screen Object Test API"() {
+```java
+class PetBrowseTest {
+    
+    @Test
+    void interactWithPetBrowse_throughPetBrowseScreenObject(UiTestAPI uiTestAPI) {
 
-    given: "a screen object can be created using a factory method"
-    def customerBrowseScreenObject = CustomerBrowseScreenObject.of(
-            environment
-    )
+        // given:
+        final PetType water = storePetType("Water");
+        final PetType dragon = storePetType("Dragon");
 
-    and:
-    customerBrowseScreenObject
-            .searchForCustomer("Bob Ross")
+        final Pet waterPet1 = storePetForType(water);
+        final Pet waterPet2 = storePetForType(water);
 
-    and: "a screen object can also be created via its constructor"
-    def customerEditScreenObject = new CustomerEditScreenObject(
-            uiTestAPI.getOpenedEditorScreen(CustomerEdit),
-            environment
-    )
+        final Pet dragonPet1 = storePetForType(dragon);
+        final Pet dragonPet2 = storePetForType(dragon);
 
-    when:
-    customerEditScreenObject
-            .changeNameTo("Meggy Simpson")
+        // and:
+        final PetBrowseScreen petBrowse = PetBrowseScreen.open(uiTestAPI);
 
+        assertThat(petBrowse.isActive())
+                .isTrue();
 
-    then:
-    customerEditScreenObject
-        .isClosed()
+        // and:
+        assertThat(petBrowse.petCount())
+                .isEqualTo(4);
 
-    and:
-    customerBrowseScreenObject
-        .isActive()
+        // when:
+        petBrowse.filterByType(dragon);
+
+        // then:
+        assertThat(petBrowse.petCount())
+                .isEqualTo(2);
+
+        // and:
+        assertThat(petBrowse.pets())
+                .contains(dragonPet1, dragonPet2)
+                .doesNotContain(waterPet1, waterPet2);
+    }
 }
+
 ```
 
 This variant allows having a higher abstraction in the test case. It also decouples the test cases from the API of the Screen itself.
@@ -376,29 +405,34 @@ The last remaining concept of Sneferu is the Interactions APIs. Interactions are
 
 An interaction usage looks like this:
 
-```groovy
+```java
 import static de.diedavids.sneferu.ComponentDescriptors.button
 import static de.diedavids.sneferu.Interactions.click
 
-def "Interaction Usage"() {
+class InteractionsTest {
 
-    given:
-    def customerBrowse = environment.uiTestAPI
-                            .openStandardLookup(Customer, CustomerBrowse)
+    @Test
+    void when_interactionIsPerformed_then_resultOfTheInteractionIsVisible(UiTestAPI uiTestAPI) {
 
-    when: 'using the click interaction'
-        customerBrowse
-                .interact(
-                        /* the click interaction */
-                        click( 
-                            /* the target of the click interaction */
-                            button("createBtn")
-                        )
+        // when:
+        visitBrowse.interact(
+                // the click interaction happens here
+                click(
+                        // each interaction requires a component to interact on
+                        button("createBtn")
                 )
+        );
+
+        // then:
+        final StandardEditorTestAPI<Visit, VisitEdit> visitEdit = uiTestAPI.getOpenedEditorScreen(VisitEdit.class);
+
+        assertThat(uiTestAPI.isActive(visitEdit))
+                .isTrue();
+    }
 }
 ```
 
-An interaction invokes a `ScreenTestAPI` instance (like the `customerBrowse` instance in this case). Then it normally gets a target to act upon via a parameter (like the Component Descriptor `button("createBtn")` instance).
+An interaction invokes a `ScreenTestAPI` instance (like the `visitBrowse` instance in this case). Then it normally gets a target to act upon via a parameter (like the Component Descriptor `button("createBtn")` instance).
 
 The Interaction then goes ahead and performs the desired action upon the target component.
 
@@ -438,13 +472,13 @@ Terminating Interactions, on the other hand, return a value. By returning that v
 In the test case the result can be retrieved and used for verification purposes:
 
 ```groovy
-when:
+// when:
 OperationResult result = customerEdit
         .interact(enter(textField("nameField"), "Bob Ross"))
-        .andThenGet(closeEditor())
+        .andThenGet(closeEditor());
 
-then:
-result == OperationResult.success()
+// then:
+result.equals(OperationResult.success());
 ```
 
 Terminating Interactions can be invoked via one of the following alias methods in the `ScreenTestAPI`:
@@ -460,12 +494,14 @@ Terminating Interactions can be invoked via one of the following alias methods i
 Here is an example of how to use the two different types of interactions in a test case:
 
 ```groovy
-import static de.diedavids.sneferu.ComponentDescriptors.*
-import static de.diedavids.sneferu.Interactions.*
+import static de.diedavids.sneferu.ComponentDescriptors.*;
+import static de.diedavids.sneferu.Interactions.*;
 
-def "Chainable Interactions can be combined to perform a series of steps"() {
 
-    when: 'an order is placed from a customer editor screen'
+@Test
+void chainableInteractionsCanBeCombinedToPerformASeriesOfSteps() {
+
+    // when: an order is placed from a customer editor screen
     OperationResult operationResult = 
     
          customerWithTabsEdit
@@ -478,7 +514,7 @@ def "Chainable Interactions can be combined to perform a series of steps"() {
              .andThen(click(button("placeOrderBtn")))
         
              /* terminating interaction: closeEditor */
-             .andThenGet(closeEditor())
+             .andThenGet(closeEditor());
 }
 ```
 
@@ -529,12 +565,13 @@ public class ApplicationInteractions {
 With that it is possible to use it directly in a test case:
 
 ```groovy
-import static ApplicationInteractions.slide
-import static ApplicationComponentDescriptors.slider
+import static ApplicationInteractions.slide;
+import static ApplicationComponentDescriptors.slider;
 
-def "a slider component can be used through its custom interaction"() {
+@Test
+void aSliderComponentCanBeUsedThroughItsCustomInteraction() {
 
-    when: 'an order is placed from a customer editor screen'
+    // when: an order is placed from a customer editor screen
          customerEditor
              .interact(slide(slider("ageSlider"), 24))
 }
