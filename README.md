@@ -140,12 +140,10 @@ Let's go through them one by one.
 It is possible to get a reference to the `UiTestAPI` by injecting the dependency by adding a parameter to the test case: `UiTestAPI uiTestAPI`.
 
 ```java
-class SneferuUiTest {
+class SneferuUiTestAPIInjectionTest {
 
   @Test
-  public void uiTestApi_can_be_injected_to_work_with_the_screens(
-      UiTestAPI uiTestAPI
-  ) {
+  public void uiTestApi_can_be_injected_to_work_with_the_screens(UiTestAPI uiTestAPI) {
 
       final StandardLookupTestAPI<Visit, VisitBrowse> visitBrowse = uiTestAPI.openStandardLookup(Visit.class, VisitBrowse.class);
 
