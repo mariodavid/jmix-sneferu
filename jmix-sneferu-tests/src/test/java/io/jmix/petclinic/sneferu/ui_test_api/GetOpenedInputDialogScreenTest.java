@@ -49,7 +49,7 @@ class GetOpenedInputDialogScreenTest {
   void given_inputDialogIsOpen_when_getOpenedInputDialog_then_inputDialogIsReturned(UiTestAPI uiTestAPI) {
 
     // given:
-    final String pikachuIdentifier = "092";
+    final String pikachuIdentifier = "025";
     final Pet pikachu = storePikachu(pikachuIdentifier);
 
     // and:
@@ -80,7 +80,7 @@ class GetOpenedInputDialogScreenTest {
   void given_inputDialogIsOpen_when_incorrectlyInteractingWithInputDialog_then_operationResultIsFail(Screens screens, UiTestAPI uiTestAPI) {
 
     // given:
-    storePikachu("092");
+    storePikachu("025");
 
     // and:
     openPetByIdInputDialog(uiTestAPI);

@@ -49,7 +49,7 @@ class CloseInputDialogInteractionTest {
   void when_interactionIsPerformed_then_inputDialogIsClosedAndSuccessIsReturned(UiTestAPI uiTestAPI) {
 
     // given:
-    final String pikachuIdentifier = "092";
+    final String pikachuIdentifier = "025";
     final Pet pikachu = storePikachu(pikachuIdentifier);
 
     // and:
@@ -81,7 +81,7 @@ class CloseInputDialogInteractionTest {
   void when_interactionIsPerformedWithCloseAction_then_inputDialogIsClosedAndSuccessIsReturned(UiTestAPI uiTestAPI) {
 
     // given:
-    storePikachu("092");
+    storePikachu("025");
 
     // and:
     openPetByIdInputDialog(uiTestAPI);

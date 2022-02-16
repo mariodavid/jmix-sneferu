@@ -59,7 +59,7 @@ class VisitEditTest {
     private Pet createPet() {
         Pet newPet = dataManager.create(Pet.class);
         newPet.setName("Pikachu");
-        newPet.setIdentificationNumber("092");
+        newPet.setIdentificationNumber("025");
         return dataManager.save(newPet);
     }
 

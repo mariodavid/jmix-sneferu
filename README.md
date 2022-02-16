@@ -8,9 +8,7 @@
 
 ## Sneferu
 
-Sneferu is a testing library to simplify web integration testing for a Jmix application.
-It consists of a couple of APIs that allow you to express interactions and verifications with UI screens via a dedicated high-level testing language. 
-
+Sneferu is a testing library to simplify integration testing for a Jmix application. It contains APIs that allows you to express interactions and verifications with UI screens via a high-level testing language. 
 
 ### Overview
 
@@ -23,20 +21,15 @@ Sneferu enables you to:
 * verify any business logic in a Screen Controller
 * ensure the correct linking between a Screen XML and its Controller counterpart
 * verify correct display of any programmatic creation of Screen Components / Dialogs
-* emulate & verify data loading  
-* emulate & verify Service Interface interactions
-
-As Sneferu is based on the web integration test facilities of Jmix, there is a certain limitation in what areas are not covered. In particular, Sneferu relies on the abstractions provided by the Jmix and Vaadin component interfaces. It assumes that behind this interface everything "works as expected". 
+* verify the data loading from the database through declarative data loading
 
 What Sneferu _does not cover_:
 
-* Client-Side Vaadin UI logic that is executed only in the browser
-
-#### Sneferu Landscape
+* perform client-side JS based Vaadin UI logic that is executed _only_ in the browser (like showing the date picker popup where it is possible to select a particular date)
+* verify rendering issues in the browser
 
 ![Sneferu Landscape](img/sneferu-overview.png)
 
-If you can live with those trade-offs, feel free to join the lovely world of web integration testing in Jmix expressed through a beautiful API.
 
 #### Motivation & Background
 
@@ -45,45 +38,46 @@ Testing of a Jmix application on the web layer mainly consists of two extremes:
 1. write a unit test for the business logic in the screen controllers
 2. write a functional UI test that executes the application through the browser
 
-Both of those extremes have their downsides.
+Both of those extremes have their downsides. The first one requires mocking out every programmatic interaction with the Jmix UI interfaces. Also, unit tests do not cover any of the screen layout definitions or the data binding of a Screen.
 
-The first one requires mocking out every programmatic interaction with the Jmix UI interfaces. Also, unit tests do not cover any of the screen layout definitions or the data binding of a Screen.
-
-Selenium-based UI testing, on the other hand, is much more black-box, slower, more brittle and overall harder to maintain. It can achieve a higher degree of confidence since the application behaves as it is supposed to, as it exercises the application almost as the user does. But this trade-off is a very expensive one. 
+Selenium-based UI testing, on the other hand, is much more black-box, slower, more brittle and overall harder to maintain. It can achieve a higher degree of confidence though. Since the application is exercised almost as the user does. But this additional confidence level is hard to achieve and maintain.
 
 An example test case in Sneferu looks like this:
 
 ```java
-public class VisitBrowseToEditTest {
+public class CreateVisitTest {
+    
+    @Test
+    void aVisitCanBeCreated_whenAllFieldsAreFilled(UiTestAPI uiTestAPI) {
 
-  @Test
-  public void aVisitCanBeCreated_whenAllFieldsAreFilled(
-      @StartScreen StandardLookupTestAPI<Visit,VisitBrowse> visitBrowse,
-      @SubsequentScreen StandardEditorTestAPI<Visit, VisitEdit> visitEdit,
-      @NewEntity Pet pikachu
-  ) {
+        // given:
+        final Pet pikachu = dataManager.create(Pet.class);
+        pikachu.setName("Pikachu");
+        pikachu.setIdentificationNumber("025");
+        final Pet savedPikachu = dataManager.save(pikachu);
 
-    // given:
-    pikachu.setName("Pikachu");
+        // and:
+        final StandardLookupTestAPI<Visit, VisitBrowse> visitBrowse = uiTestAPI.openStandardLookup(Visit.class, VisitBrowse.class);
+        visitBrowse.interact(click(button("createBtn")));
 
-    // and:
-    visitBrowse.interact(click(button("createBtn")));
+        // when:
+        final StandardEditorTestAPI<Visit, VisitEdit> visitEdit = uiTestAPI.getOpenedEditorScreen(VisitEdit.class);
 
-    // when:
-    OperationResult outcome = (OperationResult) visitEdit
-        .interact(enter(dateField("visitDateField"), new Date()))
-        .interact(enter(textField("descriptionField"), "Regular Visit"))
-        .interact(select(lookupField("petField"), pikachu))
-        .andThenGet(closeEditor());
+        OperationResult outcome = (OperationResult) visitEdit
+                .interact(enter(dateField("visitStartField"), LocalDateTime.now()))
+                .interact(enter(textField("descriptionField"), "Regular Visit"))
+                .interact(select(comboBox("typeField"), VisitType.REGULAR_CHECKUP))
+                .interact(select(entityComboBox("petField"), savedPikachu))
+                .andThenGet(closeEditor());
 
-    // then:
-    assertThat(outcome).isEqualTo(OperationResult.success());
+        // then:
+        assertThat(outcome).isEqualTo(OperationResult.success());
 
-    // and:
-    assertThat(environment.getUiTestAPI().isActive(visitEdit))
-      .isFalse();
+        // and:
+        assertThat(uiTestAPI.isActive(visitEdit))
+                .isFalse();
 
-  }
+    }
 }
 ```
 
@@ -103,51 +97,35 @@ configure(webModule) {
 Afterward, you can create your first web integration test:
 
 ```groovy
-import de.diedavids.sneferu.UiTestAPI
 
-import static de.diedavids.sneferu.ComponentDescriptors.*
-import static de.diedavids.sneferu.Interactions.*
+import de.diedavids.sneferu.UiTestAPI;
 
+import static de.diedavids.sneferu.ComponentDescriptors.*;
+import static de.diedavids.sneferu.Interactions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class FirstSneferuSpec extends Specification {
+@SpringBootTest
+@SneferuUiTest(authenticatedUser = "admin", mainScreenId = "petclinic_MainScreen", screenBasePackages = "io.jmix.petclinic")
+class FirstSneferuTest {
 
-    @Shared
-    @ClassRule
-    SneferuTestUiEnvironment environment =
-            new SneferuTestUiEnvironment(TestImprovementsWebTestContainer.Common.INSTANCE)
-                    .withScreenPackages(
-                            "com.haulmont.cuba.web.app.main",
-                            "com.rtcab.ddceti.web.screens.customer"
-                    )
-                    .withUserLogin("admin")
-                    .withMainScreen(MainScreen)
+    @Test
+    void openScreen_clickButton_verifyWhichScreenIsActive(UiTestAPI uiTestAPI) {
 
+        // given:
+        final StandardLookupTestAPI<Visit, VisitBrowse> visitBrowse = uiTestAPI.openStandardLookup(Visit.class, VisitBrowse.class);
 
-    def "click a button, open a screen, enter some values and close the screen"() {
+        // when:
+        visitBrowse.interact(click(button("createBtn")));
 
-        given:
-        def customerBrowse = environment.uiTestAPI.openStandardLookup(Customer, CustomerBrowse)
-
-        when:
-        customerBrowse
-                .interact(click(button("createBtn")))
-
-        and:
-        environment.uiTestAPI.getOpenedEditorScreen(CustomerEdit)
-                .interact(enter(textField("nameField"), "Bob Ross"))
-                .andThenGet(closeEditor())
-
-        then:
-        environment.uiTestAPI.isActive(customerBrowse)
+        // then:
+        assertThat(uiTestAPI.isActive(uiTestAPI.getOpenedEditorScreen(VisitEdit.class))).isTrue();
     }
 }
 ```
 
 ### Example Usage
 
-A dedicated example of using Sneferu is shown via the Jmix Petclinic sample application: [mariodavid/jmix-sneferu-example](https://github.com/mariodavid/jmix-sneferu-example).
-
-It contains a lot of example test cases that show the various usage options of Sneferu.
+There are a lot of example tests on how to use Sneferu: [jmix-sneferu-tests](jmix-sneferu-tests/src/test/java/io/jmix/petclinic/screen).
 
 
 ### Documentation
