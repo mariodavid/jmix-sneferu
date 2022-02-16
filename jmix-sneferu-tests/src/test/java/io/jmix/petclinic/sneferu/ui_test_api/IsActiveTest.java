@@ -1,11 +1,10 @@
 package io.jmix.petclinic.sneferu.ui_test_api;
 
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardScreenTestAPI;
 import io.jmix.petclinic.screen.visit.MyVisits;
 import io.jmix.ui.Screens;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

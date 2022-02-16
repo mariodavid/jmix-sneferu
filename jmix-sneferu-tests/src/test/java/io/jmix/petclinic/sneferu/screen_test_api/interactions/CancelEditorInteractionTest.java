@@ -1,13 +1,12 @@
 package io.jmix.petclinic.sneferu.screen_test_api.interactions;
 
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import io.jmix.core.DataManager;
 import io.jmix.petclinic.entity.veterinarian.Veterinarian;
 import io.jmix.petclinic.screen.veterinarian.veterinarian.VeterinarianEdit;
 import io.jmix.petclinic.sneferu.DatabaseCleanup;
-import io.jmix.ui.Screens;
 import io.jmix.ui.util.OperationResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

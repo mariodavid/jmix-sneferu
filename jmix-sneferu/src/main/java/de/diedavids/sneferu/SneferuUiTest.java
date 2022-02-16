@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package de.diedavids.sneferu.environment;
+package de.diedavids.sneferu;
 
+import de.diedavids.sneferu.extension.SneferuUiTestExtension;
 import io.jmix.ui.Screens;
 import io.jmix.ui.UiProperties;
 import io.jmix.ui.testassist.junit.JmixUiTestExtension;

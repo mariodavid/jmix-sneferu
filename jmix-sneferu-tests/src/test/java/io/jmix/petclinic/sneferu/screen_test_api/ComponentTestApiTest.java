@@ -2,26 +2,18 @@ package io.jmix.petclinic.sneferu.screen_test_api;
 
 import de.diedavids.sneferu.UiTestAPI;
 import de.diedavids.sneferu.components.testapi.ButtonTestAPI;
-import de.diedavids.sneferu.components.testapi.ComboBoxTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import de.diedavids.sneferu.screen.StandardLookupTestAPI;
 import io.jmix.petclinic.entity.visit.Visit;
-import io.jmix.petclinic.entity.visit.VisitType;
 import io.jmix.petclinic.screen.visit.VisitBrowse;
 import io.jmix.petclinic.screen.visit.VisitEdit;
-import io.jmix.ui.Screens;
 import io.jmix.ui.component.Button;
 import io.jmix.ui.component.DateField;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
-
 import static de.diedavids.sneferu.ComponentDescriptors.*;
-import static de.diedavids.sneferu.Interactions.*;
-import static de.diedavids.sneferu.Interactions.entityValue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

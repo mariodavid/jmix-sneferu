@@ -1,28 +1,14 @@
 package io.jmix.petclinic.sneferu.screen_test_api.interactions;
 
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.components.descriptor.DataGridComponentDescriptor;
-import de.diedavids.sneferu.components.descriptor.TableComponentDescriptor;
 import de.diedavids.sneferu.components.descriptor.TabsheetComponentDescriptor;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardLookupTestAPI;
-import io.jmix.core.DataManager;
-import io.jmix.petclinic.entity.pet.PetType;
-import io.jmix.petclinic.entity.veterinarian.Veterinarian;
 import io.jmix.petclinic.entity.visit.Visit;
-import io.jmix.petclinic.screen.pet.pettype.PetTypeBrowse;
-import io.jmix.petclinic.screen.veterinarian.veterinarian.VeterinarianBrowse;
 import io.jmix.petclinic.screen.visit.VisitBrowse;
-import io.jmix.petclinic.sneferu.DatabaseCleanup;
-import io.jmix.ui.Screens;
 import io.jmix.ui.component.TabSheet;
-import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Set;
 
 import static de.diedavids.sneferu.ComponentDescriptors.*;
 import static de.diedavids.sneferu.Interactions.openTab;

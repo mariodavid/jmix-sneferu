@@ -2,7 +2,7 @@ package io.jmix.petclinic.sneferu.ui_test_api;
 
 import de.diedavids.sneferu.ScreenNotOpenException;
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.InputDialogTestAPI;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import io.jmix.core.DataManager;

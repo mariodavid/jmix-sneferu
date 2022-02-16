@@ -93,8 +93,9 @@ dependencies {
 
 Afterward, you can create your first web integration test:
 
-```groovy
+```java
 import de.diedavids.sneferu.UiTestAPI;
+import de.diedavids.sneferu.SneferuUiTest;
 
 import static de.diedavids.sneferu.ComponentDescriptors.*;
 import static de.diedavids.sneferu.Interactions.*;
@@ -167,21 +168,31 @@ The next concept of Sneferu allows you to interact with a particular Screen and 
 1. apply interactions (see [Interactions](#Interactions)) on a particular screen
 2. retrieve components of a screen to interact with those through its [Component Test API](#Component-Test-API)
 
-To interact with the `ScreenTestAPI` an instance of that must be retrieved via the `UiTestAPI` as described above. Once those instances are available (`customerBrowse` and `customerWithTabsEdit` in the following example), the API can be used to interact with a Screen via its Test API directly in the test case.
+To interact with the `ScreenTestAPI` an instance of that must be retrieved via the `UiTestAPI` as described above. Once those instances are available (`visitBrowse` and `visitEdit` in the following example), the API can be used to interact with a Screen via its Test API directly in the test case.
 
 A usage example looks like this:
 
-```groovy
-def "Screen Test API usage"() {
+```java
+class InteractionsTest {
 
-    when: 'interactions are applied for a particular screen'
-    customerBrowse
-             .interact(click(button("createBtn")))
+    @Test
+    void when_interactionIsPerformed_then_resultOfTheInteractionIsVisible(UiTestAPI uiTestAPI) {
 
-    and: 'components can be retrieved for further reference'
-    customerWithTabsEdit
-             .component(dateField("birthdayField"))
-             .enter(today)
+        // when:
+        visitBrowse.interact(
+                // the click interaction happens here
+                click(
+                        // each interaction requires a component to interact on
+                        button("createBtn")
+                )
+        );
+
+        // then:
+        final StandardEditorTestAPI<Visit, VisitEdit> visitEdit = uiTestAPI.getOpenedEditorScreen(VisitEdit.class);
+
+        assertThat(uiTestAPI.isActive(visitEdit))
+                .isTrue();
+    }
 }
 ```
 
@@ -562,6 +573,8 @@ public class CubaSneferuTest {
 In Jmix, this has to be replaced with the `@SneferuUiTest` annotation:
 
 ```java
+import de.diedavids.sneferu.SneferuUiTest;
+
 @SpringBootTest
 @SneferuUiTest(authenticatedUser = "admin", mainScreenId = "petclinic_MainScreen", screenBasePackages = "io.jmix.petclinic")
 class JmixSneferuTest {

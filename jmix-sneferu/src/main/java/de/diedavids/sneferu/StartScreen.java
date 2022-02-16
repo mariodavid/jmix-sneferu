@@ -1,4 +1,4 @@
-package de.diedavids.sneferu.environment;
+package de.diedavids.sneferu;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

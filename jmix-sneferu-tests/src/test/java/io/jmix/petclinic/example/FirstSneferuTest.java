@@ -1,9 +1,11 @@
-package io.jmix.petclinic.screen.visit;
+package io.jmix.petclinic.example;
 
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardLookupTestAPI;
 import io.jmix.petclinic.entity.visit.Visit;
+import io.jmix.petclinic.screen.visit.VisitBrowse;
+import io.jmix.petclinic.screen.visit.VisitEdit;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

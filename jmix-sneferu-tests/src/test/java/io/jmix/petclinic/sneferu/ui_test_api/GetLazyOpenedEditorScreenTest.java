@@ -2,16 +2,14 @@ package io.jmix.petclinic.sneferu.ui_test_api;
 
 import de.diedavids.sneferu.ScreenNotOpenException;
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import io.jmix.core.DataManager;
-import io.jmix.core.impl.DataManagerImpl;
 import io.jmix.petclinic.entity.visit.Visit;
 import io.jmix.petclinic.screen.visit.VisitEdit;
 import io.jmix.ui.Screens;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

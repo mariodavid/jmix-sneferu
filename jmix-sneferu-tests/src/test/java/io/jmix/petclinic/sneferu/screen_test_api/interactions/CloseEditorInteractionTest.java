@@ -1,21 +1,14 @@
 package io.jmix.petclinic.sneferu.screen_test_api.interactions;
 
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import io.jmix.petclinic.entity.veterinarian.Veterinarian;
-import io.jmix.petclinic.entity.visit.Visit;
 import io.jmix.petclinic.screen.veterinarian.veterinarian.VeterinarianEdit;
-import io.jmix.petclinic.screen.visit.VisitEdit;
-import io.jmix.ui.Screens;
 import io.jmix.ui.util.OperationResult;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
-
-import static de.diedavids.sneferu.ComponentDescriptors.dateField;
 import static de.diedavids.sneferu.ComponentDescriptors.textInputField;
 import static de.diedavids.sneferu.Interactions.*;
 import static org.assertj.core.api.Assertions.assertThat;

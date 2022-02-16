@@ -2,7 +2,7 @@ package io.jmix.petclinic.sneferu.screen_test_api.interactions;
 
 import de.diedavids.sneferu.ScreenNotOpenException;
 import de.diedavids.sneferu.UiTestAPI;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.InputDialogTestAPI;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import io.jmix.core.DataManager;
@@ -10,7 +10,6 @@ import io.jmix.petclinic.entity.pet.Pet;
 import io.jmix.petclinic.screen.pet.pet.PetBrowse;
 import io.jmix.petclinic.screen.pet.pet.PetEdit;
 import io.jmix.petclinic.sneferu.DatabaseCleanup;
-import io.jmix.ui.Screens;
 import io.jmix.ui.app.inputdialog.InputDialog;
 import io.jmix.ui.util.OperationResult;
 import org.junit.jupiter.api.BeforeEach;

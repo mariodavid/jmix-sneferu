@@ -1,6 +1,9 @@
-package de.diedavids.sneferu.environment;
+package de.diedavids.sneferu.extension;
 
 import de.diedavids.sneferu.JmixUiTestAPI;
+import de.diedavids.sneferu.SneferuUiTest;
+import de.diedavids.sneferu.StartScreen;
+import de.diedavids.sneferu.SubsequentScreen;
 import de.diedavids.sneferu.UiTestAPI;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import de.diedavids.sneferu.screen.StandardLookupTestAPI;

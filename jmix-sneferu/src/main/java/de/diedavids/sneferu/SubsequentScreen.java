@@ -1,4 +1,4 @@
-package de.diedavids.sneferu.environment;
+package de.diedavids.sneferu;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  *   // with a ScreenNotOpenException
  *
  *   visitEdit
- *         .interact(enter(dateField("visitDateField"), new Date()))
+ *         .interact(enter(dateField("visitStartField"), LocalDateTime.now()))
  * }
  *}</pre>
  */

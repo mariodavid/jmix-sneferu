@@ -2,12 +2,10 @@ package io.jmix.petclinic.sneferu.screen_test_api.interactions;
 
 import de.diedavids.sneferu.UiTestAPI;
 import de.diedavids.sneferu.components.descriptor.DateFieldComponentDescriptor;
-import de.diedavids.sneferu.environment.SneferuUiTest;
+import de.diedavids.sneferu.SneferuUiTest;
 import de.diedavids.sneferu.screen.StandardEditorTestAPI;
 import io.jmix.petclinic.entity.visit.Visit;
 import io.jmix.petclinic.screen.visit.VisitEdit;
-import io.jmix.ui.Screens;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
