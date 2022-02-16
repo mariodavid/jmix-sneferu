@@ -86,11 +86,8 @@ public class CreateVisitTest {
 To use Sneferu, it is required to add the dependency to the Jmix project. In the `build.gradle` the following dependency has to be added to the web-module:
 
 ```groovy
-configure(webModule) {
-    // ...
-    dependencies {
-        testImplementation 'de.diedavids.jmix.sneferu:jmix-sneferu:**SNEFERU-VERSION**'
-    }
+dependencies {
+    testImplementation 'de.diedavids.jmix.sneferu:jmix-sneferu:**SNEFERU-VERSION**'
 }
 ```
 
