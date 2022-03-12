@@ -6,8 +6,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
 
-    implementation 'io.jmix.ui:jmix-ui:1.2.0-SNAPSHOT'
-    implementation 'io.jmix.ui:jmix-ui-test-assist:1.2.0-SNAPSHOT'
+    implementation 'io.jmix.ui:jmix-ui:1.2.0'
+    implementation 'io.jmix.ui:jmix-ui-test-assist:1.2.0'
 
 
     testImplementation 'org.mockito:mockito-core:4.3.1'

@@ -8,7 +8,7 @@ archivesBaseName = 'jmix-sneferu-tests'
 apply plugin: 'org.springframework.boot'
 
 jmix {
-    bomVersion = '1.2.0-SNAPSHOT'
+    bomVersion = '1.2.0'
     projectId = 'petclinic'
 }
 
