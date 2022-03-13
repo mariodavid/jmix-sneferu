@@ -12,9 +12,12 @@ import de.diedavids.sneferu.interactions.EditedEntityInteraction;
 import de.diedavids.sneferu.interactions.GetValueInteraction;
 import de.diedavids.sneferu.interactions.OpenTabInteraction;
 import de.diedavids.sneferu.interactions.ScreenOpenModeInteraction;
+import de.diedavids.sneferu.interactions.SearchAndSelectByEntityInteraction;
+import de.diedavids.sneferu.interactions.SearchAndSelectByIndexInteraction;
 import de.diedavids.sneferu.interactions.SelectInListInteraction;
 import de.diedavids.sneferu.interactions.SetValueInteraction;
 import io.jmix.ui.component.Component;
+import io.jmix.ui.component.SuggestionField;
 import io.jmix.ui.screen.CloseAction;
 import io.jmix.ui.screen.FrameOwner;
 
@@ -102,6 +105,48 @@ public class Interactions {
     }
 
 
+
+    /**
+     * creates a search and select interaction,
+     * that performs a search on a suggestion field and select the given entry if possible
+     *
+     * @param <C> type of the Component
+     * @param <F> type of the Component Test API
+     *
+     * @param componentDescriptor the component descriptor describing the component to act upon
+     * @param searchTerm the search term that should be set
+     * @param entityToSelect the entity to select out of the search suggestions
+     * @return a SearchAndSelectInteraction instance
+     */
+    public static <C extends SuggestionField, F extends ComponentTestAPI<C>> SearchAndSelectByEntityInteraction searchAndSelect(
+            ComponentDescriptor<C, F> componentDescriptor,
+            String searchTerm,
+            Object entityToSelect
+    ) {
+        return new SearchAndSelectByEntityInteraction(componentDescriptor, searchTerm, entityToSelect);
+    }
+
+    /**
+     * creates a search and select interaction,
+     * that performs a search on a suggestion field and select the given entry if possible
+     *
+     * @param <C> type of the Component
+     * @param <F> type of the Component Test API
+     *
+     * @param componentDescriptor the component descriptor describing the component to act upon
+     * @param searchTerm the search term that should be set
+     * @param indexToSelect the index to select out of the search suggestions
+     * @return a SearchAndSelectInteraction instance
+     */
+    public static <C extends SuggestionField, F extends ComponentTestAPI<C>> SearchAndSelectByIndexInteraction searchAndSelect(
+            ComponentDescriptor<C, F> componentDescriptor,
+            String searchTerm,
+            int indexToSelect
+    ) {
+        return new SearchAndSelectByIndexInteraction(componentDescriptor, searchTerm, indexToSelect);
+    }
+
+    /**
 
     /**
      * creates a select in list interaction, that selects a value on a given list component

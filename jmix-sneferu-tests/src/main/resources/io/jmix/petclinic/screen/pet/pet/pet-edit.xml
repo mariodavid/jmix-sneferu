@@ -60,15 +60,16 @@
                             <action id="clear" type="entity_clear"/>
                         </actions>
                     </entityComboBox>
-                    <entityComboBox id="ownerField"
-                                    dataContainer="petDc"
-                                    optionsContainer="ownersDc"
-                                    property="owner">
-                        <actions>
-                            <action id="lookup" type="entity_lookup"/>
-                            <action id="clear" type="entity_clear"/>
-                        </actions>
-                    </entityComboBox>
+                    <entitySuggestionField id="ownerSuggestionField"
+                                           inputPrompt="ownerSuggestionFieldInputPrompt"
+                                           dataContainer="petDc"
+                                           property="owner">
+                        <query entityClass="io.jmix.petclinic.entity.owner.Owner"
+                               searchStringFormat="%${searchString}%"
+                               escapeValueForLike="true">
+                            <![CDATA[select c from petclinic_Owner c where lower(c.firstName) like lower(:searchString) escape '\' order by c.firstName]]>
+                        </query>
+                    </entitySuggestionField>
                 </column>
                             <column width="250px">
                     <textField id="identificationNumberField" property="identificationNumber"/>
